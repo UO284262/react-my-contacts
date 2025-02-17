@@ -9,6 +9,14 @@ import Searcher from './components/Searcher';
 function App() {
 
   const [contacts, setContacts] = useState([]);
+  const [ageFilter, setAgeFilter] = useState(0);
+  const [searchField, setSearchField] = useState('');
+  const onSearchChange = (event) => {
+    setSearchField(event.target.value);
+  }
+  const onAgeFilterChange = (event) => {
+    setAgeFilter(event.target.value);
+  };
 
   useEffect(() => {
     fetch('https://randomuser.me/api/?results=20')
@@ -16,13 +24,10 @@ function App() {
       .then(contacts => setContacts(contacts.results));
   }, [])
 
-  const [searchField, setSearchField] = useState('');
-  const onSearchChange = (event) => {
-    setSearchField(event.target.value);
-  }
   const searchedContacts = contacts.filter(contact => {
-    return (contact.name['first'] + ' ' +
-      contact.name['last']).toLowerCase().includes(searchField.toLowerCase())
+    const fullName = (contact.name['first'] + ' ' + contact.name['last']).toLowerCase();
+    const age = contact.dob.age;
+    return fullName.includes(searchField.toLowerCase()) && age > ageFilter;
   });
 
   const onAZ = () => {
@@ -49,7 +54,12 @@ function App() {
       </header>
       {contacts.length === 0 ? <h2 className='f2'>Loading...</h2> :
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Searcher searchChange={onSearchChange} az={onAZ} za={onZA} />
+          <Searcher
+            searchChange={onSearchChange}
+            ageFilterChange={onAgeFilterChange}
+            az={onAZ}
+            za={onZA}
+          />
           <Scroll>
             <CardList contacts={searchedContacts} />
           </Scroll>
