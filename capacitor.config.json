@@ -1,5 +1,12 @@
 {
-  "appId": "es.uniovi.miw.dam",
-  "appName": "react-my-contacts",
-  "webDir": "dist"
+    "appId": "es.uniovi.miw.dam",
+    "appName": "react-my-contacts",
+    "webDir": "dist",
+    "server": {
+        "hostname": "192.168.40.154:5173/react-my-contacts",
+        "cleartext": true,
+        "allowNavigation": [
+            "*"
+        ]
+    }
 }
